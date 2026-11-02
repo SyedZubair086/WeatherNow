@@ -1,0 +1,16 @@
+# Local API configuration and secrets
+js/config.js
+.env
+.env.*
+!.env.example
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Dependencies / generated output
+node_modules/
+dist/
+coverage/

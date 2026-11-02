@@ -1,0 +1,10 @@
+{
+  "name": "WeatherNow — Live Weather Dashboard",
+  "short_name": "WeatherNow",
+  "description": "Live weather, hourly outlook and five-day forecast.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#101827",
+  "icons": [{"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

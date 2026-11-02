@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WeatherNow — a clean live weather dashboard with hourly and 5-day forecasts.">
+  <meta name="theme-color" content="#101827">
+  <title>WeatherNow — Live Weather Dashboard</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body data-weather="clear">
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="WeatherNow home"><span class="brand-mark">☀</span><span>Weather<span class="brand-light">Now</span></span></a>
+    <div class="top-actions">
+      <button class="unit-toggle" id="unitToggle" aria-label="Switch temperature unit"><span class="unit active" data-unit="C">°C</span><span class="unit-divider">/</span><span class="unit" data-unit="F">°F</span></button>
+      <button class="icon-button" id="settingsButton" title="API settings" aria-label="API settings">⚙</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <div><p class="eyebrow">YOUR WEATHER, AT A GLANCE</p><h1>Forecast for <span>everywhere.</span></h1><p class="intro-copy">A little clarity for whatever the day brings.</p></div>
+      <div class="date-chip"><span class="date-dot"></span><span id="todayDate">Checking local time…</span></div>
+    </section>
+
+    <section class="search-row" aria-label="Search for a city">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="cityInput" type="search" autocomplete="off" placeholder="Search city, e.g. Karachi" aria-label="Search city">
+        <button id="clearSearch" class="clear-search" aria-label="Clear search" hidden>×</button>
+        <div id="suggestions" class="suggestions" role="listbox" hidden></div>
+      </div>
+      <button class="primary-button" id="searchButton">Search <span>↗</span></button>
+      <button class="location-button" id="locationButton"><span>◎</span> Use my location</button>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <div id="loading" class="loading-panel" hidden><span class="spinner"></span><span>Fetching the latest forecast…</span></div>
+
+    <section class="dashboard-grid" id="dashboard" aria-label="Weather dashboard">
+      <article class="current-card glass-card">
+        <div class="card-topline"><div><p class="eyebrow">CURRENT WEATHER</p><h2 id="placeName">Karachi, PK</h2><p id="placeTime" class="muted">Local conditions</p></div><span id="weatherBadge" class="weather-badge">LIVE</span></div>
+        <div class="current-main"><div><div class="temperature"><span id="temperature">--</span><sup id="temperatureUnit">°C</sup></div><p id="weatherDescription" class="weather-description">Add an API key to see live weather</p><p class="feels-like">Feels like <strong id="feelsLike">--°</strong></p></div><div class="weather-art" id="weatherArt" aria-hidden="true">☀️</div></div>
+        <div class="high-low"><span>Today's range</span><strong id="todayRange">--° / --°</strong></div>
+        <div class="weather-stats">
+          <div class="stat"><span class="stat-icon">💧</span><div><span class="stat-label">Humidity</span><strong id="humidity">--%</strong></div></div>
+          <div class="stat"><span class="stat-icon">〰</span><div><span class="stat-label">Wind speed</span><strong id="wind">-- km/h</strong></div></div>
+          <div class="stat"><span class="stat-icon">🌅</span><div><span class="stat-label">Sunrise</span><strong id="sunrise">--:--</strong></div></div>
+          <div class="stat"><span class="stat-icon">🌇</span><div><span class="stat-label">Sunset</span><strong id="sunset">--:--</strong></div></div>
+        </div>
+        <div class="current-footer"><span><span class="live-dot"></span> Live conditions</span><span id="updatedAt">Waiting for data</span></div>
+      </article>
+
+      <article class="hourly-card glass-card">
+        <div class="section-heading"><div><p class="eyebrow">PLAN AHEAD</p><h2>Today's outlook</h2></div><span class="mini-label">NEXT 24 HOURS</span></div>
+        <div class="chart-wrap"><canvas id="hourlyChart" aria-label="Hourly temperature forecast chart" role="img"></canvas><div id="chartEmpty" class="chart-empty">Hourly forecast will appear here.</div></div>
+        <div class="hourly-strip" id="hourlyStrip"></div>
+      </article>
+
+      <article class="forecast-card glass-card">
+        <div class="section-heading"><div><p class="eyebrow">THE WEEK AHEAD</p><h2>5-day forecast</h2></div><span class="mini-label">5 DAYS</span></div>
+        <div id="fiveDayForecast" class="forecast-list"><div class="empty-row">Your forecast will appear here.</div></div>
+      </article>
+
+      <article class="air-card glass-card">
+        <div class="section-heading"><div><p class="eyebrow">BREATHE EASY</p><h2>Air quality</h2></div><span class="air-symbol">◌</span></div>
+        <div class="air-content"><div class="aqi-number" id="aqiNumber">--</div><div><strong id="aqiLabel">Waiting for data</strong><p id="aqiDescription" class="muted">Air quality information for your city.</p></div></div>
+        <div class="aqi-meter"><span id="aqiMeterFill"></span></div>
+        <div class="aqi-scale"><span>Good</span><span>Fair</span><span>Moderate</span><span>Poor</span><span>Very poor</span></div>
+      </article>
+    </section>
+
+    <section class="favourites-section">
+      <div class="section-heading"><div><p class="eyebrow">YOUR SHORTLIST</p><h2>Favourite cities</h2></div><span class="mini-label" id="favouriteCount">0 SAVED</span></div>
+      <div id="favourites" class="favourites-list"><p class="muted empty-favourites">Save a city with the ☆ button to find it here.</p></div>
+    </section>
+    <footer class="footer"><a class="brand footer-brand" href="#"><span class="brand-mark">☀</span><span>Weather<span class="brand-light">Now</span></span></a><span>Made with curiosity and a forecast. <span id="footerYear"></span></span><button id="addFavourite" class="save-current">☆ Save current city</button></footer>
+  </main>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" id="settingsForm">
+      <button class="dialog-close" aria-label="Close settings">×</button>
+      <p class="eyebrow">CONFIGURATION</p><h2>Connect your forecast</h2>
+      <p class="muted dialog-copy">Enter your OpenWeather API key to enable live data. The key is stored only in this browser's local storage, not in the project files.</p>
+      <label for="apiKeyInput">OpenWeather API key</label>
+      <input id="apiKeyInput" type="password" placeholder="Paste your API key" autocomplete="off">
+      <label class="show-key"><input id="showKey" type="checkbox"> Show key</label>
+      <button class="primary-button full-button" id="saveKeyButton" value="save">Save key & load weather</button>
+      <p class="tiny-note">For a public production app, use a server-side proxy. A key entered in a browser can be inspected by that browser's user.</p>
+      <a href="https://home.openweathermap.org/api_keys" target="_blank" rel="noreferrer">Get an API key ↗</a>
+    </form>
+  </dialog>
+  <noscript>This dashboard needs JavaScript enabled to fetch weather data.</noscript>
+</body>
+</html>
