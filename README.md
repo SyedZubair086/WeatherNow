@@ -62,11 +62,6 @@ On the live site, each visitor needs to enter their own API key unless you confi
 - [ ] Test mobile layout at a narrow viewport
 - [ ] Confirm no API key is committed to the repository
 
-## Screenshots and demo
-
-Add screenshots after running the app:
-- `screenshots/desktop.png`
-- `screenshots/mobile.png`
 
 Record a 2–3 minute demo showing city search, current weather, chart, five-day forecast, favourites, units and geolocation. Add the video URL here when ready.
 
